@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 		std::cout << "Writing file " << path << "..." << std::endl;
 
 		std::ofstream file(path);
-		file << cpp->toString(false, false);
+		file << cpp->toString(false, true);
 		file.close();
 	}
 
