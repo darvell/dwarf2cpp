@@ -467,6 +467,8 @@ std::string FundamentalTypeToString(FundamentalType ft)
 		return "long long";
 	case FundamentalType::UNSIGNED_LONG_LONG:
 		return "unsigned long long";
+	case FundamentalType::U_LONG128:
+		return "u_long128";
 	}
 
 	std::stringstream ss;
@@ -507,6 +509,7 @@ int GetFundamentalTypeSize(FundamentalType ft)
 	case FundamentalType::LONG_LONG:
 	case FundamentalType::SIGNED_LONG_LONG:
 	case FundamentalType::UNSIGNED_LONG_LONG:
+	case FundamentalType::U_LONG128:
 		return 8; // TODO: UNSURE
 	}
 

@@ -39,7 +39,8 @@ enum FundamentalType
 	BOOL               = 0x15,
 	LONG_LONG          = 0x8008,
 	SIGNED_LONG_LONG   = 0x8108,
-	UNSIGNED_LONG_LONG = 0x8208
+	UNSIGNED_LONG_LONG = 0x8208,
+	U_LONG128          = 0xa510 // Used by Burnout 1. Appears in RwSky2DVertexAlignmentOverlay, among other places.
 };
 
 struct File
