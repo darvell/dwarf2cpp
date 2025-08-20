@@ -22,7 +22,6 @@ std::string File::toString(bool justUserTypes, bool includeComments)
 			ut->type == UserType::ENUM)
 			ss << ut->toDeclarationString() << "\n";
 	}
-
 	ss << "\n";
 
 	// Write function type definitions
@@ -340,7 +339,7 @@ std::string FunctionType::toNameString(std::string name)
 
 	// This isn't really a function pointer, but we'll print it as if it is
 	// DWARF is weird
-	ss << returnType.toString() << "(*" << name << ")" << toParametersString();
+	ss << returnType.toString() << "(*" << name << toParametersString() << ")";
 	return ss.str();
 }
 
