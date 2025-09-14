@@ -40,7 +40,20 @@ enum FundamentalType
 	LONG_LONG          = 0x8008,
 	SIGNED_LONG_LONG   = 0x8108,
 	UNSIGNED_LONG_LONG = 0x8208,
-	U_LONG128          = 0xa510 // Used by Burnout 1. Appears in RwSky2DVertexAlignmentOverlay, among other places.
+	U_LONG128          = 0xa510, // Used by Burnout 1. Appears in RwSky2DVertexAlignmentOverlay, among other places.
+	
+	// Metrowerks extensions
+	MW_LONG_LONG          = 0x18,
+	MW_SIGNED_LONG_LONG   = 0x19,
+	MW_UNSIGNED_LONG_LONG = 0x1A,
+	MW_FIXED_VECTOR_8X8   = 0xA408,
+	MW_SIGNED_INT_16X8    = 0xA610,
+	MW_SIGNED_INT_8X16    = 0xA710,
+	MW_SIGNED_INT_4X32    = 0xA810,
+	MW_UNSIGNED_INT_16X8  = 0xA910,
+	MW_UNSIGNED_INT_8X16  = 0xAA10,
+	MW_UNSIGNED_INT_4X32  = 0xAB10,
+	MW_VEC2X32FLOAT       = 0xAC00
 };
 
 struct File

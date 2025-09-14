@@ -43,6 +43,9 @@
 #define DW_TAG_lo_user                0x4080
 #define DW_TAG_hi_user                0xffff
 
+// Metrowerks extensions - tags
+#define DW_TAG_MW_overlay_branch      0x4080
+
 #define DW_FORM_ADDR   0x1
 #define DW_FORM_REF    0x2
 #define DW_FORM_BLOCK2 0x3
@@ -114,6 +117,49 @@
 // User attributes
 #define DW_AT_mangled_name         (DW_AT_lo_user|DW_FORM_STRING)
 
+// Metrowerks extensions - attributes
+#define DW_AT_MW_mangled            (0x2000|DW_FORM_STRING)
+#define DW_AT_MW_restore_SP         (0x2010|DW_FORM_BLOCK2)
+#define DW_AT_MW_global_ref         (0x2020|DW_FORM_REF)
+#define DW_AT_MW_global_ref_by_name (0x2030|DW_FORM_STRING)
+#define DW_AT_MW_restore_S0         (0x2040|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_S1         (0x2050|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_S2         (0x2060|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_S3         (0x2070|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_S4         (0x2080|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_S5         (0x2090|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_S6         (0x20A0|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_S7         (0x20B0|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_S8         (0x20C0|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_F20        (0x20D0|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_F21        (0x20E0|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_F22        (0x20F0|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_F23        (0x2100|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_F24        (0x2110|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_F25        (0x2120|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_F26        (0x2130|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_F27        (0x2140|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_F28        (0x2150|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_F29        (0x2160|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_F30        (0x2170|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_D20        (0x2180|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_D21        (0x2190|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_D22        (0x21A0|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_D23        (0x21B0|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_D24        (0x21C0|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_D25        (0x21D0|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_D26        (0x2240|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_D27        (0x2250|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_D28        (0x2260|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_D29        (0x2270|DW_FORM_BLOCK2)
+#define DW_AT_MW_restore_D30        (0x2280|DW_FORM_BLOCK2)
+#define DW_AT_MW_overlay_id         (0x2290|DW_FORM_DATA4)
+#define DW_AT_MW_overlay_name       (0x22A0|DW_FORM_STRING)
+#define DW_AT_MW_global_refs_block  (0x2300|DW_FORM_BLOCK2)
+#define DW_AT_MW_local_spoffset     (0x2310|DW_FORM_BLOCK4)
+#define DW_AT_MW_MIPS16             (0x2330|DW_FORM_STRING)
+#define DW_AT_MW_DWARF2_location    (0x2340|DW_FORM_BLOCK2)
+
 #define DW_OP_REG     0x01
 #define DW_OP_BASEREG 0x02
 #define DW_OP_ADDR    0x03
@@ -124,6 +170,11 @@
 #define DW_OP_ADD     0x07
 #define DW_OP_lo_user 0xe0
 #define DW_OP_hi_user 0xff
+
+// Metrowerks extensions - location operations
+#define DW_OP_MW_FPREG  0x80
+#define DW_OP_MW_FPDREG 0x81
+#define DW_OP_MW_DREF8  0x82
 
 #define DW_FT_char             0x0001
 #define DW_FT_signed_char      0x0002
@@ -153,6 +204,19 @@
 #define DW_FT_long_long          0x8008
 #define DW_FT_signed_long_long   0x8108
 #define DW_FT_unsigned_long_long 0x8208
+
+// Metrowerks extensions - fundamental types
+#define DW_FT_MW_long_long          0x18
+#define DW_FT_MW_signed_long_long   0x19
+#define DW_FT_MW_unsigned_long_long 0x1A
+#define DW_FT_MW_fixed_vector_8x8   0xA408
+#define DW_FT_MW_signed_int_16x8    0xA610
+#define DW_FT_MW_signed_int_8x16    0xA710
+#define DW_FT_MW_signed_int_4x32    0xA810
+#define DW_FT_MW_unsigned_int_16x8  0xA910
+#define DW_FT_MW_unsigned_int_8x16  0xAA10
+#define DW_FT_MW_unsigned_int_4x32  0xAB10
+#define DW_FT_MW_vec2x32float       0xAC00
 
 #define DW_MOD_pointer_to   0x01
 #define DW_MOD_reference_to 0x02

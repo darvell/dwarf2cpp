@@ -8,9 +8,15 @@
 #include <vector>
 #include <map>
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
-#include <experimental/filesystem>
 
-namespace filesystem = std::experimental::filesystem;
+// Cross-platform filesystem support
+#ifdef USE_STD_FILESYSTEM
+    #include <filesystem>
+    namespace filesystem = std::filesystem;
+#else
+    #include <experimental/filesystem>
+    namespace filesystem = std::experimental::filesystem;
+#endif
 
 std::vector<Cpp::File*> cppFiles;
 std::map<Dwarf::Entry*, Cpp::UserType*> entryUTPairs;
@@ -181,6 +187,7 @@ bool processDwarf(Dwarf *dwarf)
 		switch (entry->tag)
 		{
 		case DW_TAG_compile_unit:
+		case DW_TAG_MW_overlay_branch: // Metrowerks overlay branch - handle like compile unit
 		{
 			const char *filename;
 			Cpp::File *cpp = findCppFile(entry, &filename);

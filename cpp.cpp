@@ -101,11 +101,21 @@ std::string Type::toString(std::string varName) {
 
 	if (isFundamentalType) {
 		result << FundamentalTypeToString(fundamentalType);
+	} else if (userType == nullptr) {
+		result << "<null userType>";
 	} else if (userType->type == UserType::ARRAY) {
-		return userType->arrayData->toNameString(varName);
+		if (userType->arrayData == nullptr) {
+			result << "<null arrayData>";
+		} else {
+			return userType->arrayData->toNameString(varName);
+		}
 	}
 	else if (userType->type == UserType::FUNCTION) {
-		return userType->functionData->toNameString(varName);
+		if (userType->functionData == nullptr) {
+			result << "<null functionData>";
+		} else {
+			return userType->functionData->toNameString(varName);
+		}
 	}
 	else {
 		result << userType->name;
@@ -154,6 +164,12 @@ std::string UserType::toDefinitionString(bool includeComments)
 		break;
 	case ENUM:
 		ss << enumData->toBodyString();
+		break;
+	case ARRAY:
+		// Array types are handled differently - this shouldn't normally be called
+		break;
+	case FUNCTION:
+		// Function types are handled differently - this shouldn't normally be called
 		break;
 	}
 
@@ -468,6 +484,31 @@ std::string FundamentalTypeToString(FundamentalType ft)
 		return "unsigned long long";
 	case FundamentalType::U_LONG128:
 		return "u_long128";
+	
+	// Metrowerks extensions
+	case FundamentalType::MW_LONG_LONG:
+	case FundamentalType::MW_SIGNED_LONG_LONG:
+		return "long long";
+	case FundamentalType::MW_UNSIGNED_LONG_LONG:
+		return "unsigned long long";
+	case FundamentalType::MW_FIXED_VECTOR_8X8:
+		return "mw_fixed_vector_8x8";
+	case FundamentalType::MW_INT128:
+		return "mw_int128";
+	case FundamentalType::MW_SIGNED_INT_16X8:
+		return "mw_signed_int_16x8";
+	case FundamentalType::MW_SIGNED_INT_8X16:
+		return "mw_signed_int_8x16";
+	case FundamentalType::MW_SIGNED_INT_4X32:
+		return "mw_signed_int_4x32";
+	case FundamentalType::MW_UNSIGNED_INT_16X8:
+		return "mw_unsigned_int_16x8";
+	case FundamentalType::MW_UNSIGNED_INT_8X16:
+		return "mw_unsigned_int_8x16";
+	case FundamentalType::MW_UNSIGNED_INT_4X32:
+		return "mw_unsigned_int_4x32";
+	case FundamentalType::MW_VEC2X32FLOAT:
+		return "mw_vec2x32float";
 	}
 
 	std::stringstream ss;
@@ -510,6 +551,27 @@ int GetFundamentalTypeSize(FundamentalType ft)
 	case FundamentalType::UNSIGNED_LONG_LONG:
 	case FundamentalType::U_LONG128:
 		return 8; // TODO: UNSURE
+	
+	// Metrowerks extensions
+	case FundamentalType::MW_LONG_LONG:
+	case FundamentalType::MW_SIGNED_LONG_LONG:
+	case FundamentalType::MW_UNSIGNED_LONG_LONG:
+		return 8;
+	case FundamentalType::MW_FIXED_VECTOR_8X8:
+		return 8; // 8x8 vector
+	case FundamentalType::MW_INT128:
+		return 16; // 128-bit integer
+	case FundamentalType::MW_SIGNED_INT_16X8:
+	case FundamentalType::MW_UNSIGNED_INT_16X8:
+		return 16; // 16x8 vector = 128 bits
+	case FundamentalType::MW_SIGNED_INT_8X16:
+	case FundamentalType::MW_UNSIGNED_INT_8X16:
+		return 16; // 8x16 vector = 128 bits
+	case FundamentalType::MW_SIGNED_INT_4X32:
+	case FundamentalType::MW_UNSIGNED_INT_4X32:
+		return 16; // 4x32 vector = 128 bits
+	case FundamentalType::MW_VEC2X32FLOAT:
+		return 8; // 2x32 vector = 64 bits
 	}
 
 	return -1;

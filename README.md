@@ -21,14 +21,40 @@ This tool was built specifically as a reverse engineering tool for the PS2 versi
 Please note that this tool is not meant to generate *compilable* code. The code that's generated may be syntactically correct, but it is only meant to be a starting or reference point for reverse engineering a piece of software. The C++ generation code is overall fairly simple and only generates definitions in the order that they are read in from the DWARF data. Struct definitions, for example, will likely run into "incomplete type" errors if they contain values of types that haven't been defined yet. This tool will not decompile functions for you either, so function definitions will only contain local variable declarations and no other statements.
 
 ## Compiling
-This tool makes use of the std::experimental::filesystem library (C++17). A Visual Studio solution is included.
+This tool requires C++17 and uses the filesystem library. Multiple build systems are supported for cross-platform compatibility.
 
-If using gcc you can compile with:
-```
-g++ *.cpp -o dwarf2cpp -lstdc++fs
+### Option 1: Using Make (Recommended)
+```bash
+make
 ```
 
-[More information](https://www.codingame.com/playgrounds/5659/c17-filesystem) (See Compiler/Library support)
+### Option 2: Using CMake
+```bash
+mkdir build && cd build
+cmake ..
+make
+```
+
+### Option 3: Manual compilation
+
+**On macOS:**
+```bash
+g++ *.cpp -o dwarf2cpp -std=c++17
+```
+
+**On Linux:**
+```bash
+g++ *.cpp -o dwarf2cpp -std=c++17 -lstdc++fs
+```
+
+**On Windows (Visual Studio):**
+A Visual Studio solution file (`dwarf2cpp.sln`) is included for Windows builds.
+
+### Build Requirements
+- C++17 compatible compiler (GCC 8+, Clang 9+, MSVC 2019+)
+- Standard library with filesystem support
+
+[More information about C++17 filesystem](https://www.codingame.com/playgrounds/5659/c17-filesystem)
 
 ## Usage
 ```

@@ -347,3 +347,19 @@ healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
+
+# Cross-platform build outputs
+dwarf2cpp
+dwarf2cpp.exe
+build/
+
+# macOS specific
+.DS_Store
+
+# Linux/Unix specific
+*.o
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
