@@ -493,8 +493,6 @@ std::string FundamentalTypeToString(FundamentalType ft)
 		return "unsigned long long";
 	case FundamentalType::MW_FIXED_VECTOR_8X8:
 		return "mw_fixed_vector_8x8";
-	case FundamentalType::MW_INT128:
-		return "mw_int128";
 	case FundamentalType::MW_SIGNED_INT_16X8:
 		return "mw_signed_int_16x8";
 	case FundamentalType::MW_SIGNED_INT_8X16:
@@ -559,8 +557,7 @@ int GetFundamentalTypeSize(FundamentalType ft)
 		return 8;
 	case FundamentalType::MW_FIXED_VECTOR_8X8:
 		return 8; // 8x8 vector
-	case FundamentalType::MW_INT128:
-		return 16; // 128-bit integer
+	// MW_INT128 removed due to conflict with U_LONG128
 	case FundamentalType::MW_SIGNED_INT_16X8:
 	case FundamentalType::MW_UNSIGNED_INT_16X8:
 		return 16; // 16x8 vector = 128 bits

@@ -1,6 +1,7 @@
 #include "elf.h"
 #include "dwarf.h"
 #include "cpp.h"
+#include "symbol_table.h"
 
 #include <string>
 #include <iostream>
@@ -21,6 +22,9 @@
 std::vector<Cpp::File*> cppFiles;
 std::map<Dwarf::Entry*, Cpp::UserType*> entryUTPairs;
 std::map<std::string, std::vector<Cpp::UserType*>> nameUTListPairs;
+
+// Global symbol table for enhanced output
+SymbolTable g_symbolTable;
 
 int currentCompileUnitIndex = 0;
 
@@ -77,6 +81,12 @@ int main(int argc, char **argv)
 	if (elf->getError()) {
 		std::cout << "Failed to parse " << elfFilename << " as an ELF file. Error Code: " << elf->getError() << std::endl;
 		return 1;
+	}
+
+	// Load symbol table for enhanced output
+	std::cout << "Loading symbol table..." << std::endl;
+	if (!g_symbolTable.loadFromElf(elf)) {
+		std::cout << "Warning: Could not load symbol table. Output may have missing names." << std::endl;
 	}
 
 	std::cout << "Loading DWARFv1 information..." << std::endl;
@@ -888,6 +898,25 @@ bool processFunction(Dwarf::Entry *entry, Cpp::Function *f)
 						f->typeOwner->classData->functions.push_back(*f);
 					}
 				}
+			}
+		}
+	}
+
+	// Enhance function information with symbol table data
+	if (g_symbolTable.isLoaded()) {
+		// If function name is missing, try to get it from symbol table
+		if (f->name.empty() && f->startAddress != 0) {
+			const SymbolInfo* symbol = g_symbolTable.findByAddress(f->startAddress);
+			if (symbol && symbol->is_function) {
+				f->name = symbol->name;
+			}
+		}
+		
+		// If function address is missing, try to get it from symbol table
+		if (f->startAddress == 0 && !f->name.empty()) {
+			const SymbolInfo* symbol = g_symbolTable.findByName(f->name);
+			if (symbol && symbol->is_function) {
+				f->startAddress = symbol->address;
 			}
 		}
 	}

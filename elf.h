@@ -98,6 +98,33 @@ struct Elf32_Shdr
 	Elf32_Word sh_entsize;
 };
 
+// ELF Symbol Table Entry
+struct Elf32_Sym
+{
+	Elf32_Word    st_name;   // index into .strtab
+	Elf32_Addr    st_value;  // symbol value/address
+	Elf32_Word    st_size;   // size of symbol
+	unsigned char st_info;   // symbol binding and type
+	unsigned char st_other;  // visibility
+	Elf32_Half    st_shndx;  // section header index
+};
+
+// Symbol binding (upper 4 bits of st_info)
+#define STB_LOCAL   0   // Local symbols
+#define STB_GLOBAL  1   // Global symbols
+#define STB_WEAK    2   // Weak symbols
+
+// Symbol type (lower 4 bits of st_info)
+#define STT_NOTYPE  0   // No type specified
+#define STT_OBJECT  1   // Data object
+#define STT_FUNC    2   // Function
+#define STT_SECTION 3   // Section
+#define STT_FILE    4   // Source file name
+
+// Macros to extract binding and type
+#define ELF32_ST_BIND(i)   ((i) >> 4)
+#define ELF32_ST_TYPE(i)   ((i) & 0x0f)
+
 class ElfFile
 {
 public:
@@ -184,7 +211,7 @@ public:
 	}
 
 	template<class T>
-	inline T read(void *data)
+	inline T read(void *data) const
 	{
 		T x = *(T*)data;
 
@@ -197,6 +224,41 @@ public:
 		}
 
 		return x;
+	}
+
+	// Symbol table access methods
+	inline Elf32_Sym* getSymbolTable(int *count = nullptr) const
+	{
+		Elf32_Shdr *symtab_hdr = getSectionHeader(".symtab");
+		if (!symtab_hdr) {
+			if (count) *count = 0;
+			return nullptr;
+		}
+		
+		if (count) {
+			*count = read<Elf32_Word>(&symtab_hdr->sh_size) / sizeof(Elf32_Sym);
+		}
+		
+		return (Elf32_Sym*)getSectionData(symtab_hdr);
+	}
+	
+	inline char* getStringTable() const
+	{
+		Elf32_Shdr *strtab_hdr = getSectionHeader(".strtab");
+		if (!strtab_hdr) return nullptr;
+		
+		return getSectionData(strtab_hdr);
+	}
+	
+	inline const char* getSymbolName(const Elf32_Sym* symbol) const
+	{
+		char* strtab = getStringTable();
+		if (!strtab || !symbol) return nullptr;
+		
+		Elf32_Word name_offset = read<Elf32_Word>((void*)&symbol->st_name);
+		if (name_offset == 0) return nullptr;
+		
+		return strtab + name_offset;
 	}
 
 private:
